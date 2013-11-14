@@ -1,0 +1,22 @@
+OASISFormat: 0.3
+Name: ocaml-kojson
+Version: 0.1
+Synopsis: Combinators for matching JSON
+Authors: Petter A. Urkedal
+License: LGPL-3 with OCaml linking exception
+Plugins: DevFiles (0.3), META (0.3)
+BuildTools: ocamlbuild
+
+Library kojson
+  Path: src
+  Modules: Kojson
+  BuildDepends: prime, yojson
+
+Document kojson
+  Title: Combinators for matching JSON
+  Type: ocamlbuild (0.3)
+  InstallDir: $htmldir/html
+  BuildTools+: ocamldoc
+  XOCamlbuildPath: src
+  XOCamlbuildLibraries: kojson
+  DataFiles: COPYING ($docdir)
