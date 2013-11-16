@@ -18,10 +18,6 @@
 
 (** {2 Prerequisites} *)
 
-val on_warning : (string -> unit) ref
-(** This can be set to a handler which will be used to log warnings about
-    unused labels. *)
-
 type json =
   [ `Null
   | `Bool of bool
@@ -68,8 +64,16 @@ type assoc
     [assoc -> 'a] which throws {!Mismatch} if it does not match its
     argument. *)
 
-val of_json : ?path: path -> json -> value
-(** Pair a JSON value with a path for use during matching. *)
+val default_warn : (path -> string -> unit) ref
+(** This can be set to a default warning handler to pass to {!of_json}. *)
+
+val of_json : ?warn: (path -> string -> unit) -> ?path: path -> json -> value
+(** Pair a JSON value with a path for use during matching.
+
+    @param path The root path of JSON tree, if not [[]].
+
+    @param warn A callback to record warnings about unused labels.  The
+    default is {!default_warn}. *)
 
 val path : value -> path
 

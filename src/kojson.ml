@@ -21,9 +21,6 @@ open Unprime_list
 module String_set = Set.Make (String)
 module String_map = Prime_map.Make (String)
 
-let on_warning = ref (fun s -> ())
-let warn_f fmt = Printf.ksprintf (fun s -> !on_warning s) fmt
-
 type json = Yojson.Basic.json
 
 type path = [`Label of string | `Index of int] list
@@ -66,42 +63,45 @@ let rec string_of_expectation = function
 and string_of_mismatch (p, e) =
   string_of_expectation e ^ " under " ^ string_of_path p
 
-type value = path * json
-type assoc = path * json String_map.t
+type value = (path -> string -> unit) * path * json
+type assoc = (path -> string -> unit) * path * json String_map.t
 
-let of_json ?(path = []) v = (path, v)
-let path (p, _) = p
+let default_warn = ref (fun _ _ -> ())
 
-let literal v (p, v') =
+let of_json ?(warn = !default_warn) ?(path = []) v = (warn, path, v)
+
+let path (_, p, _) = List.rev p
+
+let literal v (warn, p, v') =
   if v <> v' then raise (Mismatch (List.rev p, `expecting_value v))
 
-let convert tn f (p, v) =
+let convert tn f (_, p, v) =
   try f v with
   | Failure msg -> raise (Mismatch (List.rev p, `expecting_type tn))
 
-let json (p, v) = v
+let json (_, _, v) = v
 
 let null = function
-  | _, `Null -> ()
-  | p, _ -> raise (Mismatch (List.rev p, `expecting_type "null"))
+  | _, _, `Null -> ()
+  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "null"))
 
 let bool = function
-  | _, `Bool b -> b
-  | p, _ -> raise (Mismatch (List.rev p, `expecting_type "bool"))
+  | _, _, `Bool b -> b
+  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "bool"))
 
 let int = function
-  | _, `Int i -> i
-  | p, _ -> raise (Mismatch (List.rev p, `expecting_type "int"))
+  | _, _, `Int i -> i
+  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "int"))
 
 let float = function
-  | _, `Float x -> x
-  | p, _ -> raise (Mismatch (List.rev p, `expecting_type "float"))
+  | _, _, `Float x -> x
+  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "float"))
 
 let string = function
-  | _, `String s -> s
-  | p, _ -> raise (Mismatch (List.rev p, `expecting_type "string"))
+  | _, _, `String s -> s
+  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "string"))
 
-let string_enum lxs (p, v) =
+let string_enum lxs (warn, p, v) =
   try
     begin match v with
     | `String s -> List.assoc s lxs
@@ -112,72 +112,72 @@ let string_enum lxs (p, v) =
     raise (Mismatch ([], `expecting_values ls))
 
 let list f = function
-  | p, `List vs -> List.mapi (fun i v -> f (`Index i :: p, v)) vs
-  | p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
+  | warn, p, `List vs -> List.mapi (fun i v -> f (warn, `Index i :: p, v)) vs
+  | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
 
 let assoc f = function
-  | p, `Assoc lvs ->
-    f (p, List.fold (uncurry String_map.add) lvs String_map.empty)
-  | p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
+  | warn, p, `Assoc lvs ->
+    f (warn, p, List.fold (uncurry String_map.add) lvs String_map.empty)
+  | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
 
-let first fs (p, v) =
+let first fs (warn, p, v) =
   let rec loop misses = function
     | f :: fs ->
-      begin try f (p, v) with
+      begin try f (warn, p, v) with
       | Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs
       end
     | [] ->
       raise (Mismatch (List.rev p, `either (List.rev misses))) in
   loop [] fs
 
-let ( ^: ) l f (p, lvs) =
+let ( ^: ) l f (warn, p, lvs) =
   let g =
-    try f (`Label l :: p, String_map.find l lvs)
+    try f (warn, `Label l :: p, String_map.find l lvs)
     with Not_found -> raise (Mismatch (List.rev p, `expecting_label l))
-  in g (p, String_map.remove l lvs)
+  in g (warn, p, String_map.remove l lvs)
 
-let ( ^?: ) l f (p, lvs) =
+let ( ^?: ) l f (warn, p, lvs) =
   let vo, lvs' =
-    try (Some (`Label l :: p, String_map.find l lvs),
+    try (Some (warn, `Label l :: p, String_map.find l lvs),
 	 String_map.remove l lvs)
     with Not_found -> (None, lvs) in
-  f vo (p, lvs')
+  f vo (warn, p, lvs')
 
 module Assoc = struct
 
-  let path (p, _) = p
+  let path (_, p, _) = List.rev p
 
-  let json (_, lvs) = String_map.bindings lvs
+  let json (_, _, lvs) = String_map.bindings lvs
 
-  let drop ls (p, lvs) = (p, List.fold String_map.remove ls lvs)
+  let drop ls (warn, p, lvs) = (warn, p, List.fold String_map.remove ls lvs)
 
-  let empty x (p, lvs) =
+  let empty x (warn, p, lvs) =
     begin if not (String_map.is_empty lvs) then
       let ls = String_map.fold (fun k _ ks -> k :: ks) lvs [] in
       raise (Mismatch (List.rev p, `not_expecting_labels ls))
     end; x
 
-  let stop x (p, lvs) =
+  let stop x (warn, p, lvs) =
     begin if not (String_map.is_empty lvs) then
       let ls = String_map.fold (fun k _ ks -> k :: ks) lvs [] in
-      warn_f "Redundant label%s %s in association at %s."
+      ksprintf (warn (List.rev p)) "Redundant label%s %s in association."
 	(if List.length ls > 1 then "s" else "")
-	(String.concat ", " ls) (string_of_path (List.rev p))
+	(String.concat ", " ls)
     end; x
 
-  let fold f (p, lvs) =
-    String_map.fold (fun l v -> f l (`Label l :: p, v)) lvs
+  let fold f (warn, p, lvs) =
+    String_map.fold (fun l v -> f l (warn, `Label l :: p, v)) lvs
 
-  let iter f (p, lvs) =
-    String_map.iter (fun l v -> f l (`Label l :: p, v)) lvs
+  let iter f (warn, p, lvs) =
+    String_map.iter (fun l v -> f l (warn, `Label l :: p, v)) lvs
 
-  let map f (p, lvs) =
-    String_map.fold (fun l v acc -> f l (`Label l :: p, v) :: acc) lvs []
+  let map f (warn, p, lvs) =
+    String_map.fold (fun l v acc -> f l (warn, `Label l :: p, v) :: acc) lvs []
 
-  let first fs (p, lvs) =
+  let first fs (warn, p, lvs) =
     let rec loop misses = function
       | f :: fs ->
-	( try f (p, lvs)
+	( try f (warn, p, lvs)
 	  with Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs )
       | [] ->
 	raise (Mismatch (List.rev p, `either (List.rev misses))) in
