@@ -14,16 +14,14 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
+open Kojson_private
 open Printf
 open Prime
 open Unprime_list
 
-module String_set = Set.Make (String)
-module String_map = Prime_map.Make (String)
-
 type json = Yojson.Basic.json
 
-type path = [`Label of string | `Index of int] list
+type path = Kojson_private.path
 
 let string_of_pathcomp = function
   | `Label l -> l
@@ -63,123 +61,10 @@ let rec string_of_expectation = function
 and string_of_mismatch (p, e) =
   string_of_expectation e ^ " under " ^ string_of_path p
 
-type value = (path -> string -> unit) * path * json
-type assoc = (path -> string -> unit) * path * json String_map.t
-
+type jin = Kojson_private.jin
 let default_warn = ref (fun _ _ -> ())
+let jin_of_json ?(warn = !default_warn) ?(path = []) v = (warn, path, v)
+let jin_path (_, p, _) = List.rev p
 
-let of_json ?(warn = !default_warn) ?(path = []) v = (warn, path, v)
-
-let path (_, p, _) = List.rev p
-
-let literal v (warn, p, v') =
-  if v <> v' then raise (Mismatch (List.rev p, `expecting_value v))
-
-let convert tn f (_, p, v) =
-  try f v with
-  | Failure msg -> raise (Mismatch (List.rev p, `expecting_type tn))
-
-let json (_, _, v) = v
-
-let null = function
-  | _, _, `Null -> ()
-  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "null"))
-
-let bool = function
-  | _, _, `Bool b -> b
-  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "bool"))
-
-let int = function
-  | _, _, `Int i -> i
-  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "int"))
-
-let float = function
-  | _, _, `Float x -> x
-  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "float"))
-
-let string = function
-  | _, _, `String s -> s
-  | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "string"))
-
-let string_enum lxs (warn, p, v) =
-  try
-    begin match v with
-    | `String s -> List.assoc s lxs
-    | _ -> raise Not_found
-    end
-  with Not_found ->
-    let ls = List.map (fun (l, _) -> `String l) lxs in
-    raise (Mismatch ([], `expecting_values ls))
-
-let list f = function
-  | warn, p, `List vs -> List.mapi (fun i v -> f (warn, `Index i :: p, v)) vs
-  | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
-
-let assoc f = function
-  | warn, p, `Assoc lvs ->
-    f (warn, p, List.fold (uncurry String_map.add) lvs String_map.empty)
-  | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
-
-let first fs (warn, p, v) =
-  let rec loop misses = function
-    | f :: fs ->
-      begin try f (warn, p, v) with
-      | Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs
-      end
-    | [] ->
-      raise (Mismatch (List.rev p, `either (List.rev misses))) in
-  loop [] fs
-
-let ( ^: ) l f (warn, p, lvs) =
-  let g =
-    try f (warn, `Label l :: p, String_map.find l lvs)
-    with Not_found -> raise (Mismatch (List.rev p, `expecting_label l))
-  in g (warn, p, String_map.remove l lvs)
-
-let ( ^?: ) l f (warn, p, lvs) =
-  let vo, lvs' =
-    try (Some (warn, `Label l :: p, String_map.find l lvs),
-	 String_map.remove l lvs)
-    with Not_found -> (None, lvs) in
-  f vo (warn, p, lvs')
-
-module Assoc = struct
-
-  let path (_, p, _) = List.rev p
-
-  let json (_, _, lvs) = String_map.bindings lvs
-
-  let drop ls (warn, p, lvs) = (warn, p, List.fold String_map.remove ls lvs)
-
-  let empty x (warn, p, lvs) =
-    begin if not (String_map.is_empty lvs) then
-      let ls = String_map.fold (fun k _ ks -> k :: ks) lvs [] in
-      raise (Mismatch (List.rev p, `not_expecting_labels ls))
-    end; x
-
-  let stop x (warn, p, lvs) =
-    begin if not (String_map.is_empty lvs) then
-      let ls = String_map.fold (fun k _ ks -> k :: ks) lvs [] in
-      ksprintf (warn (List.rev p)) "Redundant label%s %s in association."
-	(if List.length ls > 1 then "s" else "")
-	(String.concat ", " ls)
-    end; x
-
-  let fold f (warn, p, lvs) =
-    String_map.fold (fun l v -> f l (warn, `Label l :: p, v)) lvs
-
-  let iter f (warn, p, lvs) =
-    String_map.iter (fun l v -> f l (warn, `Label l :: p, v)) lvs
-
-  let map f (warn, p, lvs) =
-    String_map.fold (fun l v acc -> f l (warn, `Label l :: p, v) :: acc) lvs []
-
-  let first fs (warn, p, lvs) =
-    let rec loop misses = function
-      | f :: fs ->
-	( try f (warn, p, lvs)
-	  with Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs )
-      | [] ->
-	raise (Mismatch (List.rev p, `either (List.rev misses))) in
-    loop [] fs
-end
+type jain = Kojson_private.jain
+let jain_path (_, p, _) = List.rev p

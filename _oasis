@@ -9,7 +9,8 @@ BuildTools: ocamlbuild
 
 Library kojson
   Path: src
-  Modules: Kojson
+  InternalModules: Kojson_private
+  Modules: Kojson, Kojson_pattern
   BuildDepends: prime, yojson
 
 Document kojson
