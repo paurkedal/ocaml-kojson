@@ -166,6 +166,8 @@ module Assoc : sig
 
   val path : assoc -> path
 
+  val json : assoc -> (string * json) list
+
   val drop : string list -> assoc -> assoc
   (** [drop ls] removes the labels [ls]. *)
 

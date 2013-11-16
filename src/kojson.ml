@@ -147,6 +147,8 @@ module Assoc = struct
 
   let path (p, _) = p
 
+  let json (_, lvs) = String_map.bindings lvs
+
   let drop ls (p, lvs) = (p, List.fold String_map.remove ls lvs)
 
   let empty x (p, lvs) =
