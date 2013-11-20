@@ -70,6 +70,13 @@ module K = struct
       f (warn, p, List.fold (uncurry String_map.add) lvs String_map.empty)
     | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
 
+  let assoc_or_null f = function
+    | warn, p, `Assoc lvs ->
+      f (warn, p, List.fold (uncurry String_map.add) lvs String_map.empty)
+    | warn, p, (`Null | `List []) ->
+      f (warn, p, String_map.empty)
+    | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
+
   let first fs (warn, p, v) =
     let rec loop misses = function
       | f :: fs ->

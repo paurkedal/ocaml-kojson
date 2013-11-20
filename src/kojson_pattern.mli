@@ -64,6 +64,10 @@ module K : sig
       computed value [f vs].  The pattern [f] can be constructed using the
       {!Ka} module. *)
 
+  val assoc_or_null : (jain -> 'a) -> jin -> 'a
+  (** [assoc_or_null f] matches the same inputs as [assoc f], in addition to
+      [`Null] and [`List []] given that [f] matches the empty association. *)
+
   val first : (jin -> 'a) list -> jin -> 'a
   (** [first [f₁; …; fₙ]] matches a value which is matched by either of the [fᵢ]
       patters, and returns the result of the first match. *)
