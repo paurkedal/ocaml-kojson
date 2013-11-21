@@ -59,6 +59,10 @@ module K : sig
   (** [list f] matches [`List vs] if [f] matches [v] for each [v] in [vs], and
       returns the list of values [f v]. *)
 
+  val array : (jin -> 'a) -> jin -> 'a array
+  (** [array f] matches the same inputs as [list f], but returns an array
+      instead of a list. *)
+
   val assoc : (jain -> 'a) -> jin -> 'a
   (** [assoc f] matches [`Assoc vs] if [f] matches [vs] and passes though the
       computed value [f vs].  The pattern [f] can be constructed using the

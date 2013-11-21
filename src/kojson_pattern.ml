@@ -65,6 +65,11 @@ module K = struct
     | warn, p, `List vs -> List.mapi (fun i v -> f (warn, `Index i :: p, v)) vs
     | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
 
+  let array f = function
+    | warn, p, `List vs ->
+      Array.mapi (fun i v -> f (warn, `Index i :: p, v)) (Array.of_list vs)
+    | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
+
   let assoc f = function
     | warn, p, `Assoc lvs ->
       f (warn, p, List.fold (uncurry String_map.add) lvs String_map.empty)
