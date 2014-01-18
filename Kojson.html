@@ -1,0 +1,101 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="Kojson_pattern.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Kojson" rel="Chapter" href="Kojson.html">
+<link title="Kojson_pattern" rel="Chapter" href="Kojson_pattern.html"><link title="Prerequisites" rel="Section" href="#2_Prerequisites">
+<link title="Pattern Domains" rel="Section" href="#2_PatternDomains">
+<title>Combinators for matching JSON : Kojson</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;<a class="post" href="Kojson_pattern.html" title="Kojson_pattern">Next</a>
+</div>
+<h1>Module <a href="type_Kojson.html">Kojson</a></h1>
+
+<pre><span class="keyword">module</span> Kojson: <code class="code">sig</code> <a href="Kojson.html">..</a> <code class="code">end</code></pre><div class="info module top">
+Pattern Domains and Supporting Definitions.<br>
+</div>
+<hr width="100%">
+<br>
+<h2 id="2_Prerequisites">Prerequisites</h2><br>
+
+<pre><span id="TYPEjson"><span class="keyword">type</span> <code class="type"></code>json</span> = <code class="type">[ `Assoc of (string * <a href="Kojson.html#TYPEjson">json</a>) list<br>       | `Bool of bool<br>       | `Float of float<br>       | `Int of int<br>       | `List of <a href="Kojson.html#TYPEjson">json</a> list<br>       | `Null<br>       | `String of string ]</code> </pre>
+<div class="info ">
+The JSON tree, compatible with <code class="code">Yojson.Basic.json</code>.<br>
+</div>
+
+
+<pre><span id="TYPEpath"><span class="keyword">type</span> <code class="type"></code>path</span> = <code class="type">[ `Index of int | `Label of string ] list</code> </pre>
+<div class="info ">
+A path of crossed association labels and array indices, used to locate a
+    pattern mismatch for better error reporting.<br>
+</div>
+
+
+<pre><span id="VALstring_of_path"><span class="keyword">val</span> string_of_path</span> : <code class="type"><a href="Kojson.html#TYPEpath">path</a> -> string</code></pre><div class="info ">
+Convert a label and index path to a human readable string.<br>
+</div>
+
+<pre><span id="TYPEexpectation"><span class="keyword">type</span> <code class="type"></code>expectation</span> = <code class="type">[ `either of (<a href="Kojson.html#TYPEpath">path</a> * <a href="Kojson.html#TYPEexpectation">expectation</a>) list<br>       | `expecting_label of string<br>       | `expecting_type of string<br>       | `expecting_value of <a href="Kojson.html#TYPEjson">json</a><br>       | `expecting_values of <a href="Kojson.html#TYPEjson">json</a> list<br>       | `not_expecting_labels of string list ]</code> </pre>
+<div class="info ">
+Details of what was expected at the location where a pattern didn't
+    match.<br>
+</div>
+
+
+<pre><span id="EXCEPTIONMismatch"><span class="keyword">exception</span> Mismatch</span> <span class="keyword">of</span> <code class="type"><a href="Kojson.html#TYPEpath">path</a> * <a href="Kojson.html#TYPEexpectation">expectation</a></code></pre>
+<div class="info ">
+Exception raised to indicate a mismatch of a JSON value.  The first
+    parameter is a path leading up to the error, and the second parameter
+    explains the expected value.<br>
+</div>
+
+<pre><span id="VALstring_of_mismatch"><span class="keyword">val</span> string_of_mismatch</span> : <code class="type"><a href="Kojson.html#TYPEpath">path</a> * <a href="Kojson.html#TYPEexpectation">expectation</a> -> string</code></pre><div class="info ">
+Format a explanation of why a pattern did not match.<br>
+</div>
+
+<pre><span id="VALdefault_warn"><span class="keyword">val</span> default_warn</span> : <code class="type">(<a href="Kojson.html#TYPEpath">path</a> -> string -> unit) Pervasives.ref</code></pre><div class="info ">
+This is the default warning handler used by <a href="Kojson.html#VALjin_of_json"><code class="code">Kojson.jin_of_json</code></a>.<br>
+</div>
+<br>
+<h2 id="2_PatternDomains">Pattern Domains</h2>
+<p>
+
+    The following types form the domain of patterns, which can be built up
+    from the definitions in <a href="Kojson_pattern.html"><code class="code">Kojson_pattern</code></a>.<br>
+
+<pre><span id="TYPEjin"><span class="keyword">type</span> <code class="type"></code>jin</span> = <code class="type">Kojson_private.jin</code> </pre>
+<div class="info ">
+A JSON value paired with a path and a custom warning callback to
+    facilitate error reporting.  A <em>pattern</em> is a function of type <code class="code">jin -&gt;
+    'a</code> which throws <a href="Kojson.html#EXCEPTIONMismatch"><code class="code">Kojson.Mismatch</code></a> if it does not match its argument.<br>
+</div>
+
+
+<pre><span id="VALjin_of_json"><span class="keyword">val</span> jin_of_json</span> : <code class="type">?warn:(<a href="Kojson.html#TYPEpath">path</a> -> string -> unit) -><br>       ?path:<a href="Kojson.html#TYPEpath">path</a> -> <a href="Kojson.html#TYPEjson">json</a> -> <a href="Kojson.html#TYPEjin">jin</a></code></pre><div class="info ">
+Pair a JSON value with a path for use during matching.<br>
+</div>
+<div class="param_info"><code class="code">warn</code> : A callback to record warnings about unused labels.  The
+    default is <a href="Kojson.html#VALdefault_warn"><code class="code">Kojson.default_warn</code></a>.</div>
+<div class="param_info"><code class="code">path</code> : The root path of JSON tree, if not <code class="code">[]</code>.</div>
+
+<pre><span id="VALjin_path"><span class="keyword">val</span> jin_path</span> : <code class="type"><a href="Kojson.html#TYPEjin">jin</a> -> <a href="Kojson.html#TYPEpath">path</a></code></pre>
+<pre><span id="TYPEjain"><span class="keyword">type</span> <code class="type"></code>jain</span> = <code class="type">Kojson_private.jain</code> </pre>
+<div class="info ">
+A wrapper for an opened JSON association paired with a path and a custom
+    warning callback to facility error reporting.  An <em>association pattern</em>
+    is a function of type <code class="code">jain -&gt; 'a</code> which throws <a href="Kojson.html#EXCEPTIONMismatch"><code class="code">Kojson.Mismatch</code></a> if it does not
+    match its argument.<br>
+</div>
+
+
+<pre><span id="VALjain_path"><span class="keyword">val</span> jain_path</span> : <code class="type"><a href="Kojson.html#TYPEjain">jain</a> -> <a href="Kojson.html#TYPEpath">path</a></code></pre></body></html>

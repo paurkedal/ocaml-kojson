@@ -1,0 +1,97 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="next" href="Kojson_pattern.Ka.html">
+<link rel="Up" href="Kojson_pattern.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Kojson" rel="Chapter" href="Kojson.html">
+<link title="Kojson_pattern" rel="Chapter" href="Kojson_pattern.html"><link title="Primitive Patterns" rel="Section" href="#2_PrimitivePatterns">
+<link title="Pattern Combinators" rel="Section" href="#2_PatternCombinators">
+<title>Combinators for matching JSON : Kojson_pattern.K</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="Kojson_pattern.html" title="Kojson_pattern">Up</a>
+&nbsp;<a class="post" href="Kojson_pattern.Ka.html" title="Kojson_pattern.Ka">Next</a>
+</div>
+<h1>Module <a href="type_Kojson_pattern.K.html">Kojson_pattern.K</a></h1>
+
+<pre><span class="keyword">module</span> K: <code class="code">sig</code> <a href="Kojson_pattern.K.html">..</a> <code class="code">end</code></pre><div class="info module top">
+Patterns for Matching JSON Trees.<br>
+</div>
+<hr width="100%">
+<br>
+<h2 id="2_PrimitivePatterns">Primitive Patterns</h2><br>
+
+<pre><span id="VALliteral"><span class="keyword">val</span> literal</span> : <code class="type"><a href="Kojson.html#TYPEjson">Kojson.json</a> -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> unit</code></pre><div class="info ">
+<code class="code">literal v</code> matches only the value <code class="code">v</code>.<br>
+</div>
+
+<pre><span id="VALconvert"><span class="keyword">val</span> convert</span> : <code class="type">string -> (<a href="Kojson.html#TYPEjson">Kojson.json</a> -> 'a) -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a</code></pre><div class="info ">
+<code class="code">convert type_name f</code> performs the conversion <code class="code">f</code>, intercepting <code class="code">Failure</code>
+      and re-raises them as a conversion error informing that a value of
+      <code class="code">type_name</code> was expected.<br>
+</div>
+
+<pre><span id="VALany"><span class="keyword">val</span> any</span> : <code class="type"><a href="Kojson.html#TYPEjin">Kojson.jin</a> -> <a href="Kojson.html#TYPEjson">Kojson.json</a></code></pre><div class="info ">
+<code class="code">json</code> matches any value and returns it.<br>
+</div>
+
+<pre><span id="VALnull"><span class="keyword">val</span> null</span> : <code class="type"><a href="Kojson.html#TYPEjin">Kojson.jin</a> -> unit</code></pre><div class="info ">
+<code class="code">null</code> matches <code class="code">`Null</code>.<br>
+</div>
+
+<pre><span id="VALbool"><span class="keyword">val</span> bool</span> : <code class="type"><a href="Kojson.html#TYPEjin">Kojson.jin</a> -> bool</code></pre><div class="info ">
+<code class="code">bool</code> matches a value of the form <code class="code">`Bool b</code> and returns <code class="code">b</code>.<br>
+</div>
+
+<pre><span id="VALint"><span class="keyword">val</span> int</span> : <code class="type"><a href="Kojson.html#TYPEjin">Kojson.jin</a> -> int</code></pre><div class="info ">
+<code class="code">int</code> matches a value of the form <code class="code">`Int i</code> and returns <code class="code">i</code>.<br>
+</div>
+
+<pre><span id="VALfloat"><span class="keyword">val</span> float</span> : <code class="type"><a href="Kojson.html#TYPEjin">Kojson.jin</a> -> float</code></pre><div class="info ">
+<code class="code">float</code> matches a value of the form <code class="code">`Float x</code> and returns <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALstring"><span class="keyword">val</span> string</span> : <code class="type"><a href="Kojson.html#TYPEjin">Kojson.jin</a> -> string</code></pre><div class="info ">
+<code class="code">string</code> matches a value of the form <code class="code">`String s</code> and returns <code class="code">s</code>.<br>
+</div>
+
+<pre><span id="VALstring_enum"><span class="keyword">val</span> string_enum</span> : <code class="type">(string * 'a) list -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a</code></pre><div class="info ">
+<code class="code">string_enum lxs</code> matches any of the keys of the association list <code class="code">lxs</code>
+      and returns the corresponding value.<br>
+</div>
+<br>
+<h2 id="2_PatternCombinators">Pattern Combinators</h2><br>
+
+<pre><span id="VALlist"><span class="keyword">val</span> list</span> : <code class="type">(<a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a) -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a list</code></pre><div class="info ">
+<code class="code">list f</code> matches <code class="code">`List vs</code> if <code class="code">f</code> matches <code class="code">v</code> for each <code class="code">v</code> in <code class="code">vs</code>, and
+      returns the list of values <code class="code">f v</code>.<br>
+</div>
+
+<pre><span id="VALarray"><span class="keyword">val</span> array</span> : <code class="type">(<a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a) -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a array</code></pre><div class="info ">
+<code class="code">array f</code> matches the same inputs as <code class="code">list f</code>, but returns an array
+      instead of a list.<br>
+</div>
+
+<pre><span id="VALassoc"><span class="keyword">val</span> assoc</span> : <code class="type">(<a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a) -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a</code></pre><div class="info ">
+<code class="code">assoc f</code> matches <code class="code">`Assoc vs</code> if <code class="code">f</code> matches <code class="code">vs</code> and passes though the
+      computed value <code class="code">f vs</code>.  The pattern <code class="code">f</code> can be constructed using the
+      <a href="Kojson_pattern.Ka.html"><code class="code">Kojson_pattern.Ka</code></a> module.<br>
+</div>
+
+<pre><span id="VALassoc_or_null"><span class="keyword">val</span> assoc_or_null</span> : <code class="type">(<a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a) -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a</code></pre><div class="info ">
+<code class="code">assoc_or_null f</code> matches the same inputs as <code class="code">assoc f</code>, in addition to
+      <code class="code">`Null</code> and <code class="code">`List []</code> given that <code class="code">f</code> matches the empty association.<br>
+</div>
+
+<pre><span id="VALfirst"><span class="keyword">val</span> first</span> : <code class="type">(<a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a) list -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a</code></pre><div class="info ">
+<code class="code">first [f₁; …; fₙ]</code> matches a value which is matched by either of the <code class="code">fᵢ</code>
+      patters, and returns the result of the first match.<br>
+</div>
+</body></html>

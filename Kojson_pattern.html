@@ -1,0 +1,73 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Kojson.html">
+<link rel="Up" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Kojson" rel="Chapter" href="Kojson.html">
+<link title="Kojson_pattern" rel="Chapter" href="Kojson_pattern.html"><title>Combinators for matching JSON : Kojson_pattern</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Kojson.html" title="Kojson">Previous</a>
+&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;</div>
+<h1>Module <a href="type_Kojson_pattern.html">Kojson_pattern</a></h1>
+
+<pre><span class="keyword">module</span> Kojson_pattern: <code class="code">sig</code> <a href="Kojson_pattern.html">..</a> <code class="code">end</code></pre><div class="info module top">
+Pattern Construction.<br>
+</div>
+<hr width="100%">
+<br>
+Pattern Construction.<br>
+
+<pre><span class="keyword">module</span> <a href="Kojson_pattern.K.html">K</a>: <code class="code">sig</code> <a href="Kojson_pattern.K.html">..</a> <code class="code">end</code></pre><div class="info">
+Patterns for Matching JSON Trees.
+</div>
+
+<pre><span class="keyword">module</span> <a href="Kojson_pattern.Ka.html">Ka</a>: <code class="code">sig</code> <a href="Kojson_pattern.Ka.html">..</a> <code class="code">end</code></pre><div class="info">
+Patterns for Matching Labelled Collections of JSON Trees.
+</div>
+
+<pre><span id="VAL(^:)"><span class="keyword">val</span> (^:)</span> : <code class="type">string -> (<a href="Kojson.html#TYPEjin">Kojson.jin</a> -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a) -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a</code></pre><div class="info ">
+<code class="code">l^: f</code> matches an association with a label <code class="code">l</code> such that <code class="code">f</code> matches
+    the mapping of <code class="code">l</code> and returns a pattern which matches the remainder.
+    This combinator can be chained into patterns matching a complete
+    association:
+    <pre class="codepre"><code class="code">      open Unprime
+
+      type connspec = {uri : string; timeout : int}
+
+      let decode_connspec =
+	let open Kojson in
+	K.assoc begin
+	  "uri"^: K.string *&gt; fun uri -&gt;
+	  "timeout"^: K.int *&gt; fun timeout -&gt;
+	  Ka.stop {uri; timeout}
+	end
+    </code></pre>
+    The above <code class="code">*&gt;</code> is the reversed composition operator <code class="code">(fun f g x -&gt; g (f
+    x))</code>.<br>
+</div>
+
+<pre><span id="VAL(^?:)"><span class="keyword">val</span> (^?:)</span> : <code class="type">string -> (<a href="Kojson.html#TYPEjin">Kojson.jin</a> option -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a) -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a</code></pre><div class="info ">
+<code class="code">l^?: f</code> matches an association which either has no mapping for <code class="code">l</code> and is
+    matched by <code class="code">f None</code> or which maps <code class="code">l</code> to some <code class="code">v</code> with remainder <code class="code">lvs</code>
+    such that <code class="code">f (Some v) lvs</code> verifies a match for both <code class="code">v</code> and <code class="code">lvs</code>.  An
+    <code class="code">Option.map</code> function is convenient for constructing patterns on options:
+    <pre class="codepre"><code class="code">      let decode_certspec =
+	let open Kojson in
+	K.assoc begin
+	  "certkey"^: K.string *&gt; fun certkey -&gt;
+	  "cert"^?: Option.map K.string *&gt; Option.get_or certkey *&gt; fun cert -&gt;
+	  Ka.drop ["comment"] *&gt;
+	  Ka.stop (certkey, cert)
+	end
+    </code></pre><br>
+</div>
+</body></html>

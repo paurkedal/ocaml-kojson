@@ -1,0 +1,67 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link rel="previous" href="Kojson_pattern.K.html">
+<link rel="Up" href="Kojson_pattern.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Kojson" rel="Chapter" href="Kojson.html">
+<link title="Kojson_pattern" rel="Chapter" href="Kojson_pattern.html"><title>Combinators for matching JSON : Kojson_pattern.Ka</title>
+</head>
+<body>
+<div class="navbar"><a class="pre" href="Kojson_pattern.K.html" title="Kojson_pattern.K">Previous</a>
+&nbsp;<a class="up" href="Kojson_pattern.html" title="Kojson_pattern">Up</a>
+&nbsp;</div>
+<h1>Module <a href="type_Kojson_pattern.Ka.html">Kojson_pattern.Ka</a></h1>
+
+<pre><span class="keyword">module</span> Ka: <code class="code">sig</code> <a href="Kojson_pattern.Ka.html">..</a> <code class="code">end</code></pre><div class="info module top">
+Patterns for Matching Labelled Collections of JSON Trees.  These combine
+    patterns indexed by labels into patterns which match the remainder of an
+    association.<br>
+</div>
+<hr width="100%">
+
+<pre><span id="VALany"><span class="keyword">val</span> any</span> : <code class="type"><a href="Kojson.html#TYPEjain">Kojson.jain</a> -> (string * <a href="Kojson.html#TYPEjson">Kojson.json</a>) list</code></pre><div class="info ">
+<code class="code">any</code> matches any remaining bindings and returns them.<br>
+</div>
+
+<pre><span id="VALdrop"><span class="keyword">val</span> drop</span> : <code class="type">string list -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> <a href="Kojson.html#TYPEjain">Kojson.jain</a></code></pre><div class="info ">
+<code class="code">drop ls</code> removes the labels <code class="code">ls</code>.<br>
+</div>
+
+<pre><span id="VALempty"><span class="keyword">val</span> empty</span> : <code class="type">'a -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a</code></pre><div class="info ">
+<code class="code">empty x</code> matches the empty association and returns <code class="code">x</code>.<br>
+</div>
+
+<pre><span id="VALstop"><span class="keyword">val</span> stop</span> : <code class="type">'a -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a</code></pre><div class="info ">
+<code class="code">stop x</code> matches any association and returns <code class="code">x</code>, but warns about
+      present labels.<br>
+</div>
+
+<pre><span id="VALfold"><span class="keyword">val</span> fold</span> : <code class="type">(string -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a -> 'a) -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a -> 'a</code></pre><div class="info ">
+<code class="code">fold f</code> matches any association such that <code class="code">f lᵢ</code> matches the value <code class="code">vᵢ</code>
+      bound to <code class="code">lᵢ</code> for each label.  The composition <code class="code">f lₙ vₙ ∘ ⋯ ∘ f l₁ v₁</code>
+      is returned.<br>
+</div>
+
+<pre><span id="VALiter"><span class="keyword">val</span> iter</span> : <code class="type">(string -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> unit) -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> unit</code></pre><div class="info ">
+<code class="code">iter f</code> matches any association such that <code class="code">f lᵢ</code> matches the value
+      <code class="code">vᵢ</code> bound to <code class="code">lᵢ</code> for each label.<br>
+</div>
+
+<pre><span id="VALmap"><span class="keyword">val</span> map</span> : <code class="type">(string -> <a href="Kojson.html#TYPEjin">Kojson.jin</a> -> 'a) -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a list</code></pre><div class="info ">
+<code class="code">map f</code> matches any association such that <code class="code">f lᵢ</code> matches the value <code class="code">vᵢ</code>
+      bound to <code class="code">lᵢ</code> for each label.  The list <code class="code">[f l₁ v₁; …; f lₙ vₙ]</code> is
+      returned.<br>
+</div>
+
+<pre><span id="VALfirst"><span class="keyword">val</span> first</span> : <code class="type">(<a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a) list -> <a href="Kojson.html#TYPEjain">Kojson.jain</a> -> 'a</code></pre><div class="info ">
+<code class="code">first_assoc [f₁; …; fₙ]</code> matches an association which is matched by <code class="code">fᵢ</code>
+      for some <code class="code">i</code>, and returns the result of the first match.<br>
+</div>
+</body></html>

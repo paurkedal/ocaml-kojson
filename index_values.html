@@ -1,0 +1,193 @@
+<html>
+<head>
+<link rel="stylesheet" href="style.css" type="text/css">
+<meta content="text/html; charset=utf8" http-equiv="Content-Type">
+<link rel="Start" href="index.html">
+<link title="Index of types" rel=Appendix href="index_types.html">
+<link title="Index of exceptions" rel=Appendix href="index_exceptions.html">
+<link title="Index of values" rel=Appendix href="index_values.html">
+<link title="Index of modules" rel=Appendix href="index_modules.html">
+<link title="Kojson" rel="Chapter" href="Kojson.html">
+<link title="Kojson_pattern" rel="Chapter" href="Kojson_pattern.html"><title>Combinators for matching JSON : Index of values</title>
+</head>
+<body>
+<div class="navbar">&nbsp;<a class="up" href="index.html" title="Index">Up</a>
+&nbsp;</div>
+<h1>Index of values</h1>
+<table>
+<tr><td align="left"><br></td></tr>
+<tr><td><a href="Kojson_pattern.html#VAL(^:)">(^:)</a> [<a href="Kojson_pattern.html">Kojson_pattern</a>]</td>
+<td><div class="info">
+<code class="code">l^: f</code> matches an association with a label <code class="code">l</code> such that <code class="code">f</code> matches
+    the mapping of <code class="code">l</code> and returns a pattern which matches the remainder.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.html#VAL(^?:)">(^?:)</a> [<a href="Kojson_pattern.html">Kojson_pattern</a>]</td>
+<td><div class="info">
+<code class="code">l^?: f</code> matches an association which either has no mapping for <code class="code">l</code> and is
+    matched by <code class="code">f None</code> or which maps <code class="code">l</code> to some <code class="code">v</code> with remainder <code class="code">lvs</code>
+    such that <code class="code">f (Some v) lvs</code> verifies a match for both <code class="code">v</code> and <code class="code">lvs</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>A</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALany">any</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">any</code> matches any remaining bindings and returns them.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALany">any</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">json</code> matches any value and returns it.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALarray">array</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">array f</code> matches the same inputs as <code class="code">list f</code>, but returns an array
+      instead of a list.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALassoc">assoc</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">assoc f</code> matches <code class="code">`Assoc vs</code> if <code class="code">f</code> matches <code class="code">vs</code> and passes though the
+      computed value <code class="code">f vs</code>.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALassoc_or_null">assoc_or_null</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">assoc_or_null f</code> matches the same inputs as <code class="code">assoc f</code>, in addition to
+      <code class="code">`Null</code> and <code class="code">`List []</code> given that <code class="code">f</code> matches the empty association.
+</div>
+</td></tr>
+<tr><td align="left"><br>B</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALbool">bool</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">bool</code> matches a value of the form <code class="code">`Bool b</code> and returns <code class="code">b</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>C</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALconvert">convert</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">convert type_name f</code> performs the conversion <code class="code">f</code>, intercepting <code class="code">Failure</code>
+      and re-raises them as a conversion error informing that a value of
+      <code class="code">type_name</code> was expected.
+</div>
+</td></tr>
+<tr><td align="left"><br>D</td></tr>
+<tr><td><a href="Kojson.html#VALdefault_warn">default_warn</a> [<a href="Kojson.html">Kojson</a>]</td>
+<td><div class="info">
+This is the default warning handler used by <a href="Kojson.html#VALjin_of_json"><code class="code">Kojson.jin_of_json</code></a>.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALdrop">drop</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">drop ls</code> removes the labels <code class="code">ls</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>E</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALempty">empty</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">empty x</code> matches the empty association and returns <code class="code">x</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>F</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALfirst">first</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">first_assoc [f₁; …; fₙ]</code> matches an association which is matched by <code class="code">fᵢ</code>
+      for some <code class="code">i</code>, and returns the result of the first match.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALfirst">first</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">first [f₁; …; fₙ]</code> matches a value which is matched by either of the <code class="code">fᵢ</code>
+      patters, and returns the result of the first match.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALfloat">float</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">float</code> matches a value of the form <code class="code">`Float x</code> and returns <code class="code">x</code>.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALfold">fold</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">fold f</code> matches any association such that <code class="code">f lᵢ</code> matches the value <code class="code">vᵢ</code>
+      bound to <code class="code">lᵢ</code> for each label.
+</div>
+</td></tr>
+<tr><td align="left"><br>I</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALint">int</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">int</code> matches a value of the form <code class="code">`Int i</code> and returns <code class="code">i</code>.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALiter">iter</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">iter f</code> matches any association such that <code class="code">f lᵢ</code> matches the value
+      <code class="code">vᵢ</code> bound to <code class="code">lᵢ</code> for each label.
+</div>
+</td></tr>
+<tr><td align="left"><br>J</td></tr>
+<tr><td><a href="Kojson.html#VALjain_path">jain_path</a> [<a href="Kojson.html">Kojson</a>]</td>
+<td></td></tr>
+<tr><td><a href="Kojson.html#VALjin_of_json">jin_of_json</a> [<a href="Kojson.html">Kojson</a>]</td>
+<td><div class="info">
+Pair a JSON value with a path for use during matching.
+</div>
+</td></tr>
+<tr><td><a href="Kojson.html#VALjin_path">jin_path</a> [<a href="Kojson.html">Kojson</a>]</td>
+<td></td></tr>
+<tr><td align="left"><br>L</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALlist">list</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">list f</code> matches <code class="code">`List vs</code> if <code class="code">f</code> matches <code class="code">v</code> for each <code class="code">v</code> in <code class="code">vs</code>, and
+      returns the list of values <code class="code">f v</code>.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALliteral">literal</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">literal v</code> matches only the value <code class="code">v</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>M</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALmap">map</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">map f</code> matches any association such that <code class="code">f lᵢ</code> matches the value <code class="code">vᵢ</code>
+      bound to <code class="code">lᵢ</code> for each label.
+</div>
+</td></tr>
+<tr><td align="left"><br>N</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALnull">null</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">null</code> matches <code class="code">`Null</code>.
+</div>
+</td></tr>
+<tr><td align="left"><br>S</td></tr>
+<tr><td><a href="Kojson_pattern.Ka.html#VALstop">stop</a> [<a href="Kojson_pattern.Ka.html">Kojson_pattern.Ka</a>]</td>
+<td><div class="info">
+<code class="code">stop x</code> matches any association and returns <code class="code">x</code>, but warns about
+      present labels.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALstring">string</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">string</code> matches a value of the form <code class="code">`String s</code> and returns <code class="code">s</code>.
+</div>
+</td></tr>
+<tr><td><a href="Kojson_pattern.K.html#VALstring_enum">string_enum</a> [<a href="Kojson_pattern.K.html">Kojson_pattern.K</a>]</td>
+<td><div class="info">
+<code class="code">string_enum lxs</code> matches any of the keys of the association list <code class="code">lxs</code>
+      and returns the corresponding value.
+</div>
+</td></tr>
+<tr><td><a href="Kojson.html#VALstring_of_mismatch">string_of_mismatch</a> [<a href="Kojson.html">Kojson</a>]</td>
+<td><div class="info">
+Format a explanation of why a pattern did not match.
+</div>
+</td></tr>
+<tr><td><a href="Kojson.html#VALstring_of_path">string_of_path</a> [<a href="Kojson.html">Kojson</a>]</td>
+<td><div class="info">
+Convert a label and index path to a human readable string.
+</div>
+</td></tr>
+</table>
+</body>
+</html>
