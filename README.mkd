@@ -13,7 +13,11 @@ for precise error reporting.  The library provides two top-level modules:
     substructure to match associations, and some operators.
 
 Example:  The following decodes a list of objects containing two mandatory
-and open option attribute:
+and one optional attributes:
+
+    open Kojson_pattern
+    open Unprime
+    open Unprime_option
 
     let decode_log =
       K.list begin
