@@ -1,0 +1,46 @@
+# Kojson - JSON Parser Combinators
+
+## Synopsis
+
+Kojson provides combinators to construct functions to match JSON values in a
+convenient and asymptotically efficient way.  The patterns take as input the
+polymorphic variant `Yojson.Basic.json` wrapped with location information
+for precise error reporting.  The library provides two top-level modules:
+
+  * `Kojson` - Contains general definitions.
+  * `Kojson_pattern` - Contains the combinators. You should open this where
+    needed.  It provides a `K` substructure to match trees, a `Ka`
+    substructure to match associations, and some operators.
+
+Example:  The following decodes a list of objects containing two mandatory
+and open option attribute:
+
+    let decode_log =
+      K.list begin
+	K.assoc begin
+	  "time"^: K.int *> fun time ->
+	  "facility"^?: Option.map K.string *> fun facility_opt ->
+	  "message"^: K.string *> fun message ->
+	  Ka.stop (time, facility_opt, message)
+	end
+      end
+
+For details, see [the API reference](http://paurkedal.github.io/ocaml-kojson/).
+
+## Installation
+
+The package is available though the [author's OPAM repository][1]:
+
+    opam repo add paurkedal https://github.com/paurkedal/opam-repo-paurkedal.git
+    opam install kojson
+
+It can also be installed from the GitHub-generated release tarballs provides
+the dependencies are in place.
+
+### Dependencies
+
+* [OASIS](http://oasis.forge.ocamlcore.org/)
+* [Prime](https://github.com/paurkedal/ocaml-prime)
+* [Yojson](http://mjambon.com/yojson.html)
+
+[1]: https://github.com/paurkedal/opam-repo-paurkedal
