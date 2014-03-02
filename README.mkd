@@ -12,8 +12,12 @@ for precise error reporting.  The library provides two top-level modules:
     needed.  It provides a `K` substructure to match trees, a `Ka`
     substructure to match associations, and some operators.
 
-Example:  The following decodes a list of objects containing two mandatory
-and one optional attributes:
+For details, see [the API reference](http://paurkedal.github.io/ocaml-kojson/).
+
+### Example
+
+The following decodes a list of objects containing two mandatory and one
+optional attributes:
 
     open Kojson_pattern
     open Unprime
@@ -29,7 +33,17 @@ and one optional attributes:
         end
       end
 
-For details, see [the API reference](http://paurkedal.github.io/ocaml-kojson/).
+The input to this is constructed with `Kojson.jin_of_json` and it will throw
+a `Kojson.Mismatch` exception of the pattern does not match.  E.g.  loading
+the JSON data from a file:
+
+    let handle_error fp msg = failwith ("Cannot load "^fp^": "^msg^"\n")
+
+    let load_log_file fp =
+      try decode_log (Kojson.jin_of_json (Yojson.Basic.from_file fp)) with
+      | Yojson.Json_error msg -> handle_error fp msg
+      | Kojson.Mismatch (path, expect) ->
+        handle_error fp (Kojson.string_of_mismatch (path, expect))
 
 ## Installation
 
