@@ -45,6 +45,10 @@ the JSON data from a file:
       | Kojson.Mismatch (path, expect) ->
         handle_error fp (Kojson.string_of_mismatch (path, expect))
 
+If the file does not contain valid JSON data, then Yojson will point to the
+file and line number.  If the pattern does not match, then Kojson will
+indicate the logical path of the mismatch using labels and indices.
+
 ## Installation
 
 The package is available though the [author's OPAM repository][1]:
