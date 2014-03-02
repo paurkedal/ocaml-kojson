@@ -38,7 +38,7 @@ The package is available though the [author's OPAM repository][1]:
     opam repo add paurkedal https://github.com/paurkedal/opam-repo-paurkedal.git
     opam install kojson
 
-It can also be installed from the GitHub-generated release tarballs provides
+It can also be installed from the GitHub-generated release tarballs provided
 the dependencies are in place.
 
 ### Dependencies
