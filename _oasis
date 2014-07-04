@@ -20,4 +20,4 @@ Document kojson
   BuildTools+: ocamldoc
   XOCamlbuildPath: src
   XOCamlbuildLibraries: kojson
-  DataFiles: COPYING ($docdir)
+  DataFiles: COPYING ($docdir), COPYING.LESSER ($docdir)
