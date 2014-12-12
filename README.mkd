@@ -34,7 +34,7 @@ optional attributes:
       end
 
 The input to this is constructed with `Kojson.jin_of_json` and it will throw
-a `Kojson.Mismatch` exception of the pattern does not match.  E.g.  loading
+a `Kojson.Mismatch` exception if the pattern does not match.  E.g.  loading
 the JSON data from a file:
 
     let handle_error fp msg = failwith ("Cannot load "^fp^": "^msg^"\n")
@@ -64,5 +64,13 @@ the dependencies are in place.
 * [OASIS](http://oasis.forge.ocamlcore.org/)
 * [Prime](https://github.com/paurkedal/ocaml-prime)
 * [Yojson](http://mjambon.com/yojson.html)
+
+### See Also
+
+* [atdgen](https://github.com/mjambon/atdgen)
+* [deriving-yojson](https://github.com/hhugo/deriving-yojson)
+* [jsont](http://erratique.ch/software/jsont)
+* [piqi](http://piqi.org/)
+* [ppx_deriving_yojson](https://github.com/whitequark/ppx_deriving_yojson)
 
 [1]: https://github.com/paurkedal/opam-repo-paurkedal
