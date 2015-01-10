@@ -69,12 +69,12 @@ module K : sig
       {!Ka} module. *)
 
   val assoc_or_null : (jain -> 'a) -> jin -> 'a
-  (** [assoc_or_null f] matches the same inputs as [assoc f], in addition to
-      [`Null] and [`List []] given that [f] matches the empty association. *)
+  (** [assoc_or_null f] matches the same inputs as [assoc f], and also matches
+      [`Null] and [`List []] provided [f] matches the empty association. *)
 
   val first : (jin -> 'a) list -> jin -> 'a
-  (** [first [f₁; …; fₙ]] matches a value which is matched by either of the [fᵢ]
-      patters, and returns the result of the first match. *)
+  (** [first [f₁; …; fₙ]] matches a value which is matched by at least one of
+      the [fᵢ] patters, and returns the result of the first match. *)
 
 end
 
@@ -87,7 +87,7 @@ module Ka : sig
   (** [any] matches any remaining bindings and returns them. *)
 
   val drop : string list -> jain -> jain
-  (** [drop ls] removes the labels [ls]. *)
+  (** [drop ls] removes bindings of which the key is in [ls]. *)
 
   val empty : 'a -> jain -> 'a
   (** [empty x] matches the empty association and returns [x]. *)
@@ -111,8 +111,8 @@ module Ka : sig
       returned. *)
 
   val first : (jain -> 'a) list -> jain -> 'a
-  (** [first_assoc [f₁; …; fₙ]] matches an association which is matched by [fᵢ]
-      for some [i], and returns the result of the first match. *)
+  (** [first [f₁; …; fₙ]] matches an association which is matched by [fᵢ] for
+      some [i], and returns the result of the first match. *)
 end
 
 val ( ^: ) : string -> (jin -> jain -> 'a) -> jain -> 'a
