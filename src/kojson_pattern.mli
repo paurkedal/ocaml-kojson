@@ -31,6 +31,11 @@ module K : sig
       and re-raises them as a conversion error informing that a value of
       [type_name] was expected. *)
 
+  val convert_string : string -> (string -> 'a) -> jin -> 'a
+  (** [convert_string type_name f] performs a conversion to string followed by
+      [f], intercepting [Failure] re-raised as convertion error, claiming
+      [type_name] was expected. *)
+
   val any : jin -> json
   (** [json] matches any value and returns it. *)
 
