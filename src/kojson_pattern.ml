@@ -27,13 +27,16 @@ module K = struct
 
   let convert tn f (_, p, v) =
     try f v with
-    | Failure msg -> raise (Mismatch (List.rev p, `expecting_type tn))
+    | Failure msg | Invalid_argument msg ->
+      raise (Mismatch (List.rev p, `expecting_type tn))
 
   let convert_string tn f (_, p, v) =
     match v with
     | `String s ->
-      (try f s with
-       | Failure msg -> raise (Mismatch (List.rev p, `expecting_type tn)))
+      begin try f s with
+      | Failure msg | Invalid_argument msg ->
+	raise (Mismatch (List.rev p, `expecting_type tn))
+      end
     | _ -> raise (Mismatch (List.rev p, `expecting_type tn))
 
   let any (_, _, v) = v

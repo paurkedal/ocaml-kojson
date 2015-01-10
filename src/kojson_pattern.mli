@@ -27,14 +27,14 @@ module K : sig
   (** [literal v] matches only the value [v]. *)
 
   val convert : string -> (json -> 'a) -> jin -> 'a
-  (** [convert type_name f] performs the conversion [f], intercepting [Failure]
-      and re-raises them as a conversion error informing that a value of
-      [type_name] was expected. *)
+  (** [convert type_name f] performs the conversion [f], intercepting
+      [Failure] and [Invalid_argument] and re-raises them as a conversion
+      error informing that a value of [type_name] was expected. *)
 
   val convert_string : string -> (string -> 'a) -> jin -> 'a
   (** [convert_string type_name f] performs a conversion to string followed by
-      [f], intercepting [Failure] re-raised as convertion error, claiming
-      [type_name] was expected. *)
+      [f], intercepting [Failure] and [Invalid_argument], re-raised as
+      convertion error claiming [type_name] was expected. *)
 
   val any : jin -> json
   (** [json] matches any value and returns it. *)
