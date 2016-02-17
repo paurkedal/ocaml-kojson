@@ -1,4 +1,4 @@
-(* Copyright (C) 2013  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2013--2016  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -35,7 +35,7 @@ module K = struct
     | `String s ->
       begin try f s with
       | Failure msg | Invalid_argument msg ->
-	raise (Mismatch (List.rev p, `expecting_type tn))
+        raise (Mismatch (List.rev p, `expecting_type tn))
       end
     | _ -> raise (Mismatch (List.rev p, `expecting_type tn))
 
@@ -95,11 +95,11 @@ module K = struct
   let first fs (warn, p, v) =
     let rec loop misses = function
       | f :: fs ->
-	begin try f (warn, p, v) with
-	| Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs
-	end
+        begin try f (warn, p, v) with
+        | Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs
+        end
       | [] ->
-	raise (Mismatch (List.rev p, `either (List.rev misses))) in
+        raise (Mismatch (List.rev p, `either (List.rev misses))) in
     loop [] fs
 end
 
@@ -119,8 +119,8 @@ module Ka = struct
     begin if not (String_map.is_empty lvs) then
       let ls = String_map.fold (fun k _ ks -> k :: ks) lvs [] in
       ksprintf (warn (List.rev p)) "Redundant label%s %s in association."
-	(if List.length ls > 1 then "s" else "")
-	(String.concat ", " ls)
+        (if List.length ls > 1 then "s" else "")
+        (String.concat ", " ls)
     end; x
 
   let fold f (warn, p, lvs) =
@@ -135,10 +135,10 @@ module Ka = struct
   let first fs (warn, p, lvs) =
     let rec loop misses = function
       | f :: fs ->
-	( try f (warn, p, lvs)
-	  with Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs )
+        ( try f (warn, p, lvs)
+          with Mismatch (pi, msgi) -> loop ((pi, msgi) :: misses) fs )
       | [] ->
-	raise (Mismatch (List.rev p, `either (List.rev misses))) in
+        raise (Mismatch (List.rev p, `either (List.rev misses))) in
     loop [] fs
 end
 
@@ -151,6 +151,6 @@ let ( ^: ) l f (warn, p, lvs) =
 let ( ^?: ) l f (warn, p, lvs) =
   let vo, lvs' =
     try (Some (warn, `Label l :: p, String_map.find l lvs),
-	 String_map.remove l lvs)
+         String_map.remove l lvs)
     with Not_found -> (None, lvs) in
   f vo (warn, p, lvs')
