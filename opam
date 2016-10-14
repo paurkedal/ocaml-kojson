@@ -1,0 +1,16 @@
+opam-version: "1.2"
+name: "ocaml-kojson"
+authors: ["Petter A. Urkedal"]
+maintainer: "paurkedal@gmail.com"
+homepage: "https://github.com/paurkedal/ocaml-kojson/"
+bug-reports: "https://github.com/paurkedal/ocaml-kojson/issues"
+dev-repo: "https://github.com/paurkedal/ocaml-kojson.git"
+license: "LGPL-3 with OCaml linking exception"
+
+build: ["ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%"]
+depends: [
+  "ocamlbuild" {build}
+  "prime"
+  "topkg" {build}
+  "yojson"
+]
