@@ -1,4 +1,4 @@
-(* Copyright (C) 2013--2016  Petter A. Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2013--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -133,12 +133,12 @@ val ( ^: ) : string -> (jin -> jain -> 'a) -> jain -> 'a
       let decode_connspec =
         let open Kojson in
         K.assoc begin
-          "uri"^: K.string *> fun uri ->
-          "timeout"^: K.int *> fun timeout ->
+          "uri"^: K.string @> fun uri ->
+          "timeout"^: K.int @> fun timeout ->
           Ka.stop {uri; timeout}
         end
     ]}
-    The above [*>] is the reversed composition operator [(fun f g x -> g (f
+    The above [@>] is the reversed composition operator [(fun f g x -> g (f
     x))]. *)
 
 val ( ^?: ) : string -> (jin option -> jain -> 'a) -> jain -> 'a
@@ -150,9 +150,9 @@ val ( ^?: ) : string -> (jin option -> jain -> 'a) -> jain -> 'a
       let decode_certspec =
         let open Kojson in
         K.assoc begin
-          "certkey"^: K.string *> fun certkey ->
-          "cert"^?: Option.map K.string *> Option.get_or certkey *> fun cert ->
-          Ka.drop ["comment"] *>
+          "certkey"^: K.string @> fun certkey ->
+          "cert"^?: Option.map K.string @> Option.get_or certkey @> fun cert ->
+          Ka.drop ["comment"] @>
           Ka.stop (certkey, cert)
         end
     ]} *)

@@ -60,13 +60,13 @@ The package is available though the [author's OPAM repository][1]:
     opam repo add paurkedal https://github.com/paurkedal/opam-repo-paurkedal.git
     opam install kojson
 
-It can also be installed from the GitHub-generated release tarballs provided
-the dependencies are in place.
+Alternatively use `topkg/pkg.ml` (or `opam pin`) from a Git checkout or tar
+extraction.
 
 ### Dependencies
 
-* [OASIS](http://oasis.forge.ocamlcore.org/)
 * [Prime](https://github.com/paurkedal/ocaml-prime)
+* [Topkg](http://erratique.ch/software/topkg) (build only)
 * [Yojson](http://mjambon.com/yojson.html)
 
 ### See Also
