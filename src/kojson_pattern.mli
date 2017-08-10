@@ -60,6 +60,10 @@ module K : sig
 
   (** {2 Pattern Combinators} *)
 
+  val option : (jin -> 'a) -> jin -> 'a option
+  (** [option f] matches [`Null] as [None] and [v] as [Some x] if [f] matches
+      [v] as [x]. *)
+
   val list : (jin -> 'a) -> jin -> 'a list
   (** [list f] matches [`List vs] if [f] matches [v] for each [v] in [vs], and
       returns the list of values [f v]. *)

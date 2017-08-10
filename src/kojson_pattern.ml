@@ -1,4 +1,4 @@
-(* Copyright (C) 2013--2016  Petter A. Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2013--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -70,6 +70,10 @@ module K = struct
     with Not_found ->
       let ls = List.map (fun (l, _) -> `String l) lxs in
       raise (Mismatch ([], `expecting_values ls))
+
+  let option f = function
+    | warn, p, `Null -> None
+    | warn, p, v -> Some (f (warn, p, v))
 
   let list f = function
     | warn, p, `List vs -> List.mapi (fun i v -> f (warn, `Index i :: p, v)) vs
