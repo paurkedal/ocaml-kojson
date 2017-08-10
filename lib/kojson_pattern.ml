@@ -22,19 +22,19 @@ open Unprime_list
 
 module K = struct
 
-  let literal v (warn, p, v') =
+  let literal v (_warn, p, v') =
     if v <> v' then raise (Mismatch (List.rev p, `expecting_value v))
 
   let convert tn f (_, p, v) =
     try f v with
-    | Failure msg | Invalid_argument msg ->
+    | Failure _ | Invalid_argument _ ->
       raise (Mismatch (List.rev p, `expecting_type tn))
 
   let convert_string tn f (_, p, v) =
     match v with
     | `String s ->
       begin try f s with
-      | Failure msg | Invalid_argument msg ->
+      | Failure _ | Invalid_argument _ ->
         raise (Mismatch (List.rev p, `expecting_type tn))
       end
     | _ -> raise (Mismatch (List.rev p, `expecting_type tn))
@@ -61,7 +61,7 @@ module K = struct
     | _, _, `String s -> s
     | _, p, _ -> raise (Mismatch (List.rev p, `expecting_type "string"))
 
-  let string_enum lxs (warn, p, v) =
+  let string_enum lxs (_warn, _p, v) =
     try
       begin match v with
       | `String s -> List.assoc s lxs
@@ -72,29 +72,29 @@ module K = struct
       raise (Mismatch ([], `expecting_values ls))
 
   let option f = function
-    | warn, p, `Null -> None
+    | _warn, _p, `Null -> None
     | warn, p, v -> Some (f (warn, p, v))
 
   let list f = function
     | warn, p, `List vs -> List.mapi (fun i v -> f (warn, `Index i :: p, v)) vs
-    | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
+    | _warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
 
   let array f = function
     | warn, p, `List vs ->
       Array.mapi (fun i v -> f (warn, `Index i :: p, v)) (Array.of_list vs)
-    | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
+    | _warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "list"))
 
   let assoc f = function
     | warn, p, `Assoc lvs ->
       f (warn, p, List.fold (uncurry String_map.add) lvs String_map.empty)
-    | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
+    | _warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
 
   let assoc_or_null f = function
     | warn, p, `Assoc lvs ->
       f (warn, p, List.fold (uncurry String_map.add) lvs String_map.empty)
     | warn, p, (`Null | `List []) ->
       f (warn, p, String_map.empty)
-    | warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
+    | _warn, p, _ -> raise (Mismatch (List.rev p, `expecting_type "assoc"))
 
   let first fs (warn, p, v) =
     let rec loop misses = function
@@ -113,7 +113,7 @@ module Ka = struct
 
   let drop ls (warn, p, lvs) = (warn, p, List.fold String_map.remove ls lvs)
 
-  let empty x (warn, p, lvs) =
+  let empty x (_warn, p, lvs) =
     begin if not (String_map.is_empty lvs) then
       let ls = String_map.fold (fun k _ ks -> k :: ks) lvs [] in
       raise (Mismatch (List.rev p, `not_expecting_labels ls))

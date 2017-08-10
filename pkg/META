@@ -1,8 +1,0 @@
-description = "Kojson - JSON Parser Combinators"
-version = "%%VERSION_NUM%%"
-requires = "prime, yojson"
-archive(byte) = "kojson.cma"
-archive(native) = "kojson.cmxa"
-plugin(byte) = "kojson.cma"
-plugin(native) = "kojson.cmxs"
-exists_if = "kojson.cma"

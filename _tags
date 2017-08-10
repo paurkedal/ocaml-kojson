@@ -1,2 +1,0 @@
-"lib": include
-true: package(ppx_compose), package(prime), package(yojson)

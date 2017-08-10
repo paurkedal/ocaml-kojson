@@ -14,9 +14,7 @@
  * along with this library.  If not, see <http://www.gnu.org/licenses/>.
  *)
 
-open Kojson_private
 open Printf
-open Prime
 open Unprime_list
 
 type json = Yojson.Basic.json

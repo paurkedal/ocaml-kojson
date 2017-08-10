@@ -7,11 +7,14 @@ bug-reports: "https://github.com/paurkedal/ocaml-kojson/issues"
 dev-repo: "https://github.com/paurkedal/ocaml-kojson.git"
 license: "LGPL-3 with OCaml linking exception"
 
-build: ["ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%"]
+build: [["jbuilder" "build" "-p" name "-j" jobs]]
+build-test: [["jbuilder" "runtest" "-p" name "-j" jobs]]
+
 depends: [
-  "ocamlbuild" {build}
+  "jbuilder" {build}
   "ppx_compose" {build}
   "prime"
   "topkg" {build}
+  "topkg-jbuilder" {build}
   "yojson"
 ]
