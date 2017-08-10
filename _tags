@@ -1,2 +1,2 @@
 "src": include
-true: package(prime), package(yojson)
+true: package(ppx_compose), package(prime), package(yojson)

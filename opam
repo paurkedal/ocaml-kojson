@@ -10,6 +10,7 @@ license: "LGPL-3 with OCaml linking exception"
 build: ["ocaml" "pkg/pkg.ml" "build" "--pinned" "%{pinned}%"]
 depends: [
   "ocamlbuild" {build}
+  "ppx_compose" {build}
   "prime"
   "topkg" {build}
   "yojson"

@@ -1,4 +1,4 @@
-(* Copyright (C) 2013--2016  Petter A. Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2013--2017  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -56,7 +56,7 @@ let rec string_of_expectation = function
   | `either cases ->
     "Either " ^
       (String.concat " or "
-        (List.map (String.uncapitalize *< string_of_mismatch) cases))
+        (List.map (String.uncapitalize_ascii % string_of_mismatch) cases))
 
 and string_of_mismatch (p, e) =
   string_of_expectation e ^ " under " ^ string_of_path p

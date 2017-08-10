@@ -27,9 +27,9 @@ open Unprime_option
 let decode_log =
   K.list begin
     K.assoc begin
-      "time"^: K.int *> fun time ->
-      "facility"^?: Option.map K.string *> fun facility_opt ->
-      "message"^: K.string *> fun message ->
+      "time"^: K.int %> fun time ->
+      "facility"^?: Option.map K.string %> fun facility_opt ->
+      "message"^: K.string %> fun message ->
       Ka.stop (time, facility_opt, message)
     end
   end
