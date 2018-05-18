@@ -12,7 +12,7 @@ build-test: [["jbuilder" "runtest" "-p" name "-j" jobs]]
 
 depends: [
   "jbuilder" {build}
-  "ppx_compose" {build}
+  "ppx_compose"
   "prime"
   "yojson"
 ]
