@@ -1,9 +1,0 @@
-(jbuild_version 1)
-
-(library
- ((name kojson)
-  (public_name kojson)
-  (wrapped false)
-  (modules (Kojson Kojson_pattern Kojson_private))
-  (preprocess (pps (ppx_compose)))
-  (libraries (prime yojson))))
