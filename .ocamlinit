@@ -1,9 +1,0 @@
-#use "topfind";;
-#directory "_build/src";;
-#require "prime";;
-#require "yojson";;
-#load "kojson.cma";;
-open Kojson_pattern;;
-open Unprime;;
-open Unprime_option;;
-Printf.printf "Opened Kojson_pattern and some ocaml-prime modules.\n";;
