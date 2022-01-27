@@ -59,6 +59,10 @@ let rec string_of_expectation = function
 and string_of_mismatch (p, e) =
   string_of_expectation e ^ " under " ^ string_of_path p
 
+let () = Printexc.register_printer @@ function
+ | Mismatch (p, e) -> Some (string_of_mismatch (p, e))
+ | _ -> None
+
 type jin = Kojson_private.jin
 let default_warn = ref (fun _ _ -> ())
 let jin_of_json ?(warn = !default_warn) ?(path = []) v = (warn, path, v)
