@@ -1,4 +1,4 @@
-(* Copyright (C) 2013  Petter Urkedal <paurkedal@gmail.com>
+(* Copyright (C) 2013--2022  Petter A. Urkedal <paurkedal@gmail.com>
  *
  * This library is free software; you can redistribute it and/or modify it
  * under the terms of the GNU Lesser General Public License as published by
@@ -17,7 +17,7 @@
 module String_set = Set.Make (String)
 module String_map = Prime_map.Make (String)
 
-type json = Yojson.Basic.json
+type json = Yojson.Basic.t
 type path = [`Label of string | `Index of int] list
 type jin = (path -> string -> unit) * path * json
 type jain = (path -> string -> unit) * path * json String_map.t
