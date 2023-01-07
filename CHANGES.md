@@ -1,8 +1,10 @@
-# Change Log
+## v0.4.0 - 2023-01-07
 
-## [0.3.0]
+  - Replace deprecated Yojson.Safe.json type.
+  - Register exception printer.
+  - Build and packaging changes, including upgrade to opam 2.
 
-- Added `K.option`.
-- Build and packaging changes.
+## v0.3.0 - 2018-07-31
 
-[0.3.0]: https://github.com/paurkedal/ocaml-kojson/compare/v0.2.0...v0.3.0
+  - Added `K.option`.
+  - Build and packaging changes.
